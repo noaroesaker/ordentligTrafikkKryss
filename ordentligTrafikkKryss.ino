@@ -40,37 +40,43 @@ bool walkRequestWest = 0;  // active when someone pressed crosswalk button
 
 //timers
 const byte forDelay = 25; // delay used every count of the for loop instead of individual timers, cause this will improve response times
-const byte tickAmount = 40;
+const byte delayTickAmount = 40;
+const byte tickAmount = 20;
 
 //counter
 byte i = 0; // used for counting ticks and where in process the for loop is
 
 //memory
-bool direction = 0;    // 0 = vertical, 1 = horizontal
+bool direction = 0; // 0 = vertical, 1 = horizontal
 
-bool vertGreen = 0;    // has the vertical placed green canged yet? 0 = not
-bool vertYellow = 0;   // has the vertical placed yellow canged yet? 0 = not
-bool vertRed = 0;      // has the vertical placed red canged yet? 0 = not
-bool vertLightCha = 0; // has the vertical light completely changed yet? 0 = not
+// has the vertical light canged yet? 0 = not
+bool vertGreen = 0;
+bool vertYellow = 0;
+bool vertRed = 0;
 
-bool horiGreen = 0;    // has the vertical placed green canged yet? 0 = not
-bool horiYellow = 0;   // has the vertical placed yellow canged yet? 0 = not
-bool horiRed = 0;      // has the vertical placed red canged yet? 0 = not
-bool horiLightCha = 0; // has the horizontal light completely changed yet? 0 = not
+// has the horizontal light canged yet? 0 = not
+bool horiGreen = 0;    
+bool horiYellow = 0;
+bool horiRed = 0;
 
+// has the vertical/horizontal light completely changed yet? 0 = not
+bool vertLightCha = 0; 
+bool horiLightCha = 0;
+
+// button was pressed and request fulfilled
 bool requestNorthAck = 0;
 bool requestSouthAck = 0;
 bool requestEastAck = 0;
 bool requestWestAck = 0;
 
+// stored temporary value of tick for use with timing red
 byte northTick = 0;
 byte southTick = 0;
-byte eastTick = 0;
-byte westTick = 0;
+byte eastTick = 0;  
+byte westTick = 0;  
 
 
-void setup()
-{
+void setup(){
   // road section
   pinMode(roadLightVerticalGreen,  OUTPUT);
   pinMode(roadLightVerticalYellow, OUTPUT);
@@ -133,7 +139,7 @@ void startup(){ // sets a default starting pont
 }
 
 void loop(){
-  for(i=0; i <= 20; i++){
+  for(i=0; i <= tickAmount; i++){
     delayPut();
 
     if(!direction && !vertLightCha){
@@ -187,7 +193,7 @@ void memReset(){
 void northCrosswalk(){
   if(!direction && walkRequestNorth && !requestNorthAck && i <= 10){
         walkNorthGreen();
-        requestNorthAck = 1; 
+        requestNorthAck = 1;
         northTick = i;
       }
       if(i == northTick + 10){ // waits for 10 ticks / 10 sec
@@ -231,7 +237,6 @@ void westCrosswalk(){
       //   walkWestRed();
       // }
 }
-
 
 void sensorRead()
 {
@@ -338,7 +343,7 @@ void serialPlotter(){
 }
 
 void delayPut(){
-  for(i=0; i<tickAmount; i++)
+  for(i = 0; i < delayTickAmount; i++)
   sensorRead();
   serialPlotter();
   delay(forDelay);
