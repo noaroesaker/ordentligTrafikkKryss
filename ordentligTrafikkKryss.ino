@@ -1,33 +1,31 @@
-#define roadVerticalSense 2
 
-#define roadLightVerticalGreen 3
-#define roadLightVerticalYellow 4
-#define roadLightVerticalRed 5
 
-#define roadHorizontalSense 6
+#define roadLightVerticalGreen 2
+#define roadLightVerticalYellow 3
+#define roadLightVerticalRed 4
 
-#define roadLightHorizontalGreen 7
-#define roadLightHorizontalYellow 8
-#define roadLightHorizontalRed 9
+#define roadLightHorizontalGreen 5
+#define roadLightHorizontalYellow 6
+#define roadLightHorizontalRed 7
+
+#define roadVerticalSense 8
+#define roadHorizontalSense 9
 
 #define northCrosswalkGreen 10
 #define northCrosswalkRed 11
 
-#define northCrosswalkSwitch 12
+#define southCrosswalkGreen 12
+#define southCrosswalkRed 13
 
-#define southCrosswalkGreen 13
-#define southCrosswalkRed 14
+#define eastCrosswalkGreen 14
+#define eastCrosswalkRed 15
 
-#define southCrosswalkSwitch 15
+#define westCrosswalkGreen 16
+#define westCrosswalkRed 17
 
-#define eastCrosswalkGreen 16
-#define eastCrosswalkRed 17
-
-#define eastCrosswalkSwitch 18
-
-#define westCrosswalkGreen 19
-#define westCrosswalkRed 20
-
+#define northCrosswalkSwitch 18
+#define southCrosswalkSwitch 19
+#define eastCrosswalkSwitch 20
 #define westCrosswalkSwitch 21 
 
 //check for car at point
@@ -126,13 +124,6 @@ void loop()
   } //hellooo
 
   delay(1000);
-
-//   if(walkRequestNorth){
-//     digitalWrite(northCrosswalkGreen, HIGH);
-//   }
-//   else{
-//     digitalWrite(northCrosswalkGreen, LOW);
-//   }
 }
 
 void sensorRead()
@@ -144,8 +135,6 @@ void sensorRead()
   walkRequestSouth = digitalRead(southCrosswalkSwitch);
   walkRequestEast =  digitalRead(eastCrosswalkSwitch);
   walkRequestWest =  digitalRead(westCrosswalkSwitch);
-
-
 
   Serial.println("________________________");
 
@@ -182,76 +171,63 @@ void verticalRed(){
   digitalWrite(roadLightVerticalRed,    HIGH);
 }
 
-void horizontalUp(){
-  delay(lightChangeTimer);
-  digitalWrite(roadLightHorizontalGreen,   LOW);
-  digitalWrite(roadLightHorizontalYellow, HIGH);
-  digitalWrite(roadLightHorizontalRed,     LOW);
-  delay(lightChangeTimer);
-  digitalWrite(roadLightHorizontalGreen,   LOW);
-  digitalWrite(roadLightHorizontalYellow,  LOW);
-  digitalWrite(roadLightHorizontalRed,    HIGH);
-}
-void horizontalDown(){
-  delay(lightChangeTimer);
-  digitalWrite(roadLightHorizontalGreen,   LOW);
-  digitalWrite(roadLightHorizontalYellow, HIGH);
-  digitalWrite(roadLightHorizontalRed,     LOW);
-  delay(lightChangeTimer);
+void horizontalGreen(){
   digitalWrite(roadLightHorizontalGreen,  HIGH);
   digitalWrite(roadLightHorizontalYellow,  LOW);
   digitalWrite(roadLightHorizontalRed,     LOW);
 }
-
-void walkNorthDown(){
-  delay(lightChangeTimer);
-  digitalWrite(northCrosswalkGreen, LOW);
-  digitalWrite(northCrosswalkRed,  HIGH);
+void horizontalYellow(){
+  digitalWrite(roadLightHorizontalGreen,   LOW);
+  digitalWrite(roadLightHorizontalYellow, HIGH);
+  digitalWrite(roadLightHorizontalRed,     LOW);
 }
-void walkNorthUp(){
-  delay(lightChangeTimer);
+void horizontalRed(){
+  digitalWrite(roadLightHorizontalGreen,   LOW);
+  digitalWrite(roadLightHorizontalYellow,  LOW);
+  digitalWrite(roadLightHorizontalRed,    HIGH);
+}
+
+void walkNorthGreen(){
   digitalWrite(northCrosswalkGreen, HIGH);
   digitalWrite(northCrosswalkRed,    LOW);
 }
-
-void walkSouthDown(){
-  delay(lightChangeTimer);
-  digitalWrite(southCrosswalkGreen, LOW);
-  digitalWrite(southCrosswalkRed,  HIGH);
+void walkNorthRed(){
+  digitalWrite(northCrosswalkGreen, LOW);
+  digitalWrite(northCrosswalkRed,  HIGH);
 }
-void walkSouthUp(){
-  delay(lightChangeTimer);
+
+void walkSouthGreen(){
   digitalWrite(southCrosswalkGreen, HIGH);
   digitalWrite(southCrosswalkRed,    LOW);
 }
-
-void walkEastDown(){
-  delay(lightChangeTimer);
-  digitalWrite(eastCrosswalkGreen, LOW);
-  digitalWrite(eastCrosswalkRed,  HIGH);
+void walkSouthRed(){
+  digitalWrite(southCrosswalkGreen, LOW);
+  digitalWrite(southCrosswalkRed,  HIGH);
 }
-void walkEastUp(){
-  delay(lightChangeTimer);
+
+void walkEastGreen(){
   digitalWrite(eastCrosswalkGreen, HIGH);
   digitalWrite(eastCrosswalkRed,    LOW);
 }
-
-void walkWestDown(){
-  delay(lightChangeTimer);
-  digitalWrite(westCrosswalkGreen, LOW);
-  digitalWrite(westCrosswalkRed,  HIGH);
+void walkEastRed(){
+  digitalWrite(eastCrosswalkGreen, LOW);
+  digitalWrite(eastCrosswalkRed,  HIGH);
 }
-void walkWestUp(){
-  delay(lightChangeTimer);
+
+void walkWestGreen(){
   digitalWrite(westCrosswalkGreen, HIGH);
   digitalWrite(westCrosswalkRed,    LOW);
+}
+void walkWestRed(){
+  digitalWrite(westCrosswalkGreen, LOW);
+  digitalWrite(westCrosswalkRed,  HIGH);
 }
 
 void startup(){
   digitalWrite(roadLightHorizontalGreen,  LOW);
   digitalWrite(roadLightHorizontalYellow, LOW);
-  digitalWrite(roadLightHorizontalRed,   HIGH);
-  digitalWrite(roadLightVerticalGreen,   HIGH);
+  digitalWrite(roadLightHorizontalRed,   HIGH); //alt LOW?
+  digitalWrite(roadLightVerticalGreen,   HIGH); //alt LOW?
   digitalWrite(roadLightVerticalYellow,   LOW);
   digitalWrite(roadLightVerticalRed,      LOW);
   digitalWrite(northCrosswalkGreen, LOW);
