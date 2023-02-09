@@ -45,7 +45,7 @@ const int lightChangeTimer = 2000;
 
 byte i = 0;
 bool j = 0; //0 = vertical, 1 = horizontal
-byte k = 0;
+bool k = 0;
 byte l = 0;
 byte m = 0;
 
@@ -88,10 +88,8 @@ void loop()
 {
   for(i=0; i <= 30; i++){
     sensorRead();
-    if(j = 0){
-      if(verticalIsUp){
-        j = 1;
-      }
+    if(j == 0 && k == 0){
+      
     } 
     else{
       continue;
