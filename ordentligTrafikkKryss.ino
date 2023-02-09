@@ -46,14 +46,7 @@ const int lightChangeTimer = 2000;
 byte i = 0;
 bool direct = 0; //0 = vertical, 1 = horizontal
 bool vertLightCha = 0;
-bool vertGreen = 0;
-bool vertYellow = 0;
-bool vertRed = 0
-
 bool horiLightCha = 0;
-bool horiGreen = 0;
-bool horiYellow = 0;
-bool horiRed = 0;
 byte m = 0;
 
 void setup()
@@ -99,7 +92,7 @@ void loop()
       if(vertYellow == 0){
         verticalYellow();
       }
-      else if(vertGreen){
+      else if(vertGreen == 0){
         verticalGreen();
       }
       
@@ -107,7 +100,7 @@ void loop()
     } 
     else if(direct == 1 && horiLightCha == 0){
 
-    } //hello
+    }
     else{
       continue;
     } 
@@ -119,7 +112,7 @@ void loop()
   }
   if(!direct){
     horiLightCha = 0;
-  }
+  } //hellooo
 
   delay(1000);
 
