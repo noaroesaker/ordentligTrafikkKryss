@@ -96,7 +96,13 @@ void loop()
   for(i=0; i <= 30; i++){
     sensorRead();
     if(direct == 0 && vertLightCha == 0){
-      verticalYellow();
+      if(vertYellow == 0){
+        verticalYellow();
+      }
+      else if(vertGreen){
+        verticalGreen();
+      }
+      
       
     } 
     else if(direct == 1 && horiLightCha == 0){
