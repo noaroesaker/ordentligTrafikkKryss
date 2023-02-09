@@ -44,9 +44,9 @@ const int walkTimer = 10000;
 const int lightChangeTimer = 2000;
 
 byte i = 0;
-bool j = 0; //0 = vertical, 1 = horizontal
-bool k = 0;
-byte l = 0;
+bool direct = 0; //0 = vertical, 1 = horizontal
+bool vertLightCha = 0;
+bool horiLightCha = 0;
 byte m = 0;
 
 void setup()
@@ -88,15 +88,24 @@ void loop()
 {
   for(i=0; i <= 30; i++){
     sensorRead();
-    if(j == 0 && k == 0){
-      
+    if(direct == 0 && vertLightCha == 0){
+      digitalWrite(roadLightVerticalYellow, HIGH)
     } 
+    else if(direct == 1 && horiLightCha == 0){
+
+    }
     else{
       continue;
     } 
   }
-  j = !j;
- 
+  direct = !direct;
+
+  if(direct){
+    vertLightCha = 0;
+  }
+  if(!direct){
+    horiLightCha = 0;
+  }
 
   delay(1000);
 
@@ -139,22 +148,17 @@ void sensorRead()
   Serial.println(walkRequestWest);
 }
 
-void verticalUp(){
-  delay(lightChangeTimer);
-  digitalWrite(roadLightVerticalGreen,   LOW);
-  digitalWrite(roadLightVerticalYellow, HIGH);
-  digitalWrite(roadLightVerticalRed,     LOW);
-  delay(lightChangeTimer);
+void verticalGreen(){
   digitalWrite(roadLightVerticalGreen,  HIGH);
   digitalWrite(roadLightVerticalYellow,  LOW);
   digitalWrite(roadLightVerticalRed,     LOW);
 }
-void verticalDown(){
-  delay(lightChangeTimer);
+void verticalYellow(){
   digitalWrite(roadLightVerticalGreen,   LOW);
   digitalWrite(roadLightVerticalYellow, HIGH);
   digitalWrite(roadLightVerticalRed,     LOW);
-  delay(lightChangeTimer);
+}
+void verticalRed(){
   digitalWrite(roadLightVerticalGreen,   LOW);
   digitalWrite(roadLightVerticalYellow,  LOW);
   digitalWrite(roadLightVerticalRed,    HIGH);
