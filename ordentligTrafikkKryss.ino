@@ -44,7 +44,7 @@ const int walkTimer = 10000;
 const int lightChangeTimer = 2000;
 
 byte i = 0;
-bool direction = 0; //0 = vertical, 1 = horizontal
+bool j = 0; //0 = vertical, 1 = horizontal
 byte k = 0;
 byte l = 0;
 byte m = 0;
