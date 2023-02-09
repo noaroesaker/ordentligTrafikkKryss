@@ -44,7 +44,7 @@ const int walkTimer = 10000;
 const int lightChangeTimer = 2000;
 
 byte i = 0;
-bool direction = 0; //0 = vertical
+bool direction = 0; //0 = vertical, 1 = horizontal
 byte k = 0;
 byte l = 0;
 byte m = 0;
@@ -88,8 +88,10 @@ void loop()
 {
   for(i=0; i <= 30; i++){
     sensorRead();
-    if(true){
-      
+    if(j = 0){
+      if(verticalIsUp){
+        j = 1;
+      }
     } 
     else{
       continue;
@@ -98,7 +100,7 @@ void loop()
   j = !j;
  
 
-  delay(100);
+  delay(1000);
 
 //   if(walkRequestNorth){
 //     digitalWrite(northCrosswalkGreen, HIGH);
