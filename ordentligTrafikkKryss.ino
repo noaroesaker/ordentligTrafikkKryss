@@ -44,7 +44,7 @@ const int walkTimer = 10000;
 const int lightChangeTimer = 2000;
 
 byte i = 0;
-bool direct = 0; //0 = vertical, 1 = horizontal
+bool direction = 0; //0 = vertical, 1 = horizontal
 bool vertLightCha = 0;
 bool horiLightCha = 0;
 byte m = 0;
@@ -88,7 +88,7 @@ void loop()
 {
   for(i=0; i <= 30; i++){
     sensorRead();
-    if(direct == 0 && vertLightCha == 0){
+    if(direction == 0 && vertLightCha == 0){
       if(vertYellow == 0){
         verticalYellow();
       }
@@ -98,19 +98,19 @@ void loop()
       
       
     } 
-    else if(direct == 1 && horiLightCha == 0){
+    else if(direction == 1 && horiLightCha == 0){
 
     }
     else{
       continue;
     } 
   }
-  direct = !direct;
+  direction = !direction;
 
-  if(direct){
+  if(direction){
     vertLightCha = 0;
   }
-  if(!direct){
+  if(!direction){
     horiLightCha = 0;
   } //hellooo
 
