@@ -46,7 +46,14 @@ const int lightChangeTimer = 2000;
 byte i = 0;
 bool direct = 0; //0 = vertical, 1 = horizontal
 bool vertLightCha = 0;
+bool vertGreen = 0;
+bool vertYellow = 0;
+bool vertRed = 0;
+
 bool horiLightCha = 0;
+bool horiGreen = 0;
+bool horiYellow = 0;
+bool horiRed = 0;
 byte m = 0;
 
 void setup()
