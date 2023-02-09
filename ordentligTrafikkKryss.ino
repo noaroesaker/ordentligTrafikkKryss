@@ -1,30 +1,34 @@
-#define roadVerticalSense 6
+#define roadVerticalSense 2
 
-#define roadLightVerticalGreen 16
-#define roadLightVerticalYellow 15
-#define roadLightVerticalRed 14
+#define roadLightVerticalGreen 3
+#define roadLightVerticalYellow 4
+#define roadLightVerticalRed 5
 
-#define roadHorizontalSense 10
+#define roadHorizontalSense 6
 
-#define roadLightHorizontalGreen 19
-#define roadLightHorizontalYellow 18
-#define roadLightHorizontalRed 17
+#define roadLightHorizontalGreen 7
+#define roadLightHorizontalYellow 8
+#define roadLightHorizontalRed 9
 
-#define northCrosswalkGreen 9
-#define northCrosswalkRed 8
-#define northCrosswalkSwitch 7
+#define northCrosswalkGreen 10
+#define northCrosswalkRed 11
 
-#define southCrosswalkGreen 5
-#define southCrosswalkRed 4
-#define southCrosswalkSwitch 3
+#define northCrosswalkSwitch 12
 
-#define eastCrosswalkGreen 2
-#define eastCrosswalkRed 1
-#define eastCrosswalkSwitch 0
+#define southCrosswalkGreen 13
+#define southCrosswalkRed 14
 
-#define westCrosswalkGreen 13
-#define westCrosswalkRed 12
-#define westCrosswalkSwitch 11 
+#define southCrosswalkSwitch 15
+
+#define eastCrosswalkGreen 16
+#define eastCrosswalkRed 17
+
+#define eastCrosswalkSwitch 18
+
+#define westCrosswalkGreen 19
+#define westCrosswalkRed 20
+
+#define westCrosswalkSwitch 21 
 
 //check for car at point
 bool driveRequestVertical = 0;
