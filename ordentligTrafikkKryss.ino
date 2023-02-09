@@ -51,6 +51,9 @@ bool vertYellow = 0;
 bool vertRed = 0
 
 bool horiLightCha = 0;
+bool horiGreen = 0;
+bool horiYellow = 0;
+bool horiRed = 0;
 byte m = 0;
 
 void setup()
