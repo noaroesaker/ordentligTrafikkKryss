@@ -46,6 +46,10 @@ const int lightChangeTimer = 2000;
 byte i = 0;
 bool direct = 0; //0 = vertical, 1 = horizontal
 bool vertLightCha = 0;
+bool vertGreen = 0;
+bool vertYellow = 0;
+bool vertRed = 0
+
 bool horiLightCha = 0;
 byte m = 0;
 
@@ -89,11 +93,12 @@ void loop()
   for(i=0; i <= 30; i++){
     sensorRead();
     if(direct == 0 && vertLightCha == 0){
-      digitalWrite(roadLightVerticalYellow, HIGH)
+      verticalYellow();
+      
     } 
     else if(direct == 1 && horiLightCha == 0){
 
-    }
+    } //hello
     else{
       continue;
     } 
