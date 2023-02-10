@@ -1,3 +1,4 @@
+// #include <lightControl.h>
 #define roadLightVerticalGreen 2
 #define roadLightVerticalYellow 3
 #define roadLightVerticalRed 4
@@ -21,15 +22,15 @@
 #define westCrosswalkGreen 16
 #define westCrosswalkRed 17
 
-#define northCrosswalkSwitch 18
-#define southCrosswalkSwitch 19
-#define eastCrosswalkSwitch 20
-#define westCrosswalkSwitch 21 
+#define northCrosswalkButton 18
+#define southCrosswalkButton 19
+#define eastCrosswalkButton 20
+#define westCrosswalkButton 21 
 
-#define northButton 22
-#define southButton 23
-#define eastButton 24
-#define westButton 25
+#define northButtonWaitLed 22
+#define southButtonWaitLed 23
+#define eastButtonWaitLed 24
+#define westButtonWaitLed 25
 
 //check for car at point
 bool driveRequestVertical = 0;   // active when a car is sensed at the intersection
@@ -48,29 +49,30 @@ const byte tickAmount = 20;
 
 //counter
 byte i = 0; // used for counting ticks and where in process the for loop is
+byte j = 0; // used for delayPut where it is a delay looking for inputs
 
 //memory
-bool direction = 0; // 0 = vertical, 1 = horizontal
+bool driveDirection0v1h = 0; // 0 = vertical, 1 = horizontal
 
 // has the vertical light canged yet? 0 = not
-bool vertGreen = 0;
-bool vertYellow = 0;
-bool vertRed = 0;
+bool verticalGreenChanged = 0;
+bool verticalYellowChanged = 0;
+bool verticalRedChanged = 0;
 
 // has the horizontal light canged yet? 0 = not
-bool horiGreen = 0;    
-bool horiYellow = 0;
-bool horiRed = 0;
+bool horizontalGreenChanged = 0;    
+bool horizontalYellowChanged = 0;
+bool horizontalRedChanged = 0;
 
 // has the vertical/horizontal light completely changed yet? 0 = not
-bool vertLightCha = 0; 
-bool horiLightCha = 0;
+bool verticalLightCompleteChanged = 0; 
+bool horizontalLightCompleteChanged = 0;
 
-// button was pressed and request fulfilled
-bool walkRequestNorthAck = 0;
-bool walkRequestSouthAck = 0;
-bool walkRequestEastAck = 0;
-bool walkRequestWestAck = 0;
+// button was pressed and request fulfilled now is green light
+bool walkRequestNorthGo = 0;
+bool walkRequestSouthGo = 0;
+bool walkRequestEastGo = 0;
+bool walkRequestWestGo = 0;
 
 // walk request when red light so it remembers that you want to go over at green light
 bool walkRequestOnRedNorth = 0;
@@ -116,15 +118,15 @@ void setup(){
   pinMode(westCrosswalkGreen, OUTPUT);
   pinMode(westCrosswalkRed,   OUTPUT);
 
-  pinMode(northCrosswalkSwitch, INPUT);
-  pinMode(southCrosswalkSwitch, INPUT);
-  pinMode(eastCrosswalkSwitch,  INPUT);
-  pinMode(westCrosswalkSwitch,  INPUT);
+  pinMode(northCrosswalkButton, INPUT);
+  pinMode(southCrosswalkButton, INPUT);
+  pinMode(eastCrosswalkButton,  INPUT);
+  pinMode(westCrosswalkButton,  INPUT);
 
-  pinMode(northButton, INPUT);
-  pinMode(southButton, INPUT);
-  pinMode(eastButton,  INPUT);
-  pinMode(westButton,  INPUT);
+  pinMode(northButtonWaitLed, OUTPUT);
+  pinMode(southButtonWaitLed, OUTPUT);
+  pinMode(eastButtonWaitLed,  OUTPUT);
+  pinMode(westButtonWaitLed,  OUTPUT);
 
   Serial.begin(9600);
 
@@ -138,8 +140,6 @@ void startup(){ // sets a default starting pont
   walkSouthRed();
   walkEastRed();
   walkWestRed();
-
-  Serial.print("inshalla feil bro");
   
   // digitalWrite(roadLightHorizontalGreen,  LOW);
   // digitalWrite(roadLightHorizontalYellow, LOW);
@@ -161,18 +161,36 @@ void loop(){
   for(i=0; i <= tickAmount; i++){
     delayPut();
 
-    if(!direction && !vertLightCha){
-      if(!vertYellow){
+    if(!driveDirection0v1h && !verticalLightCompleteChanged){
+      if(!verticalYellowChanged){
         verticalYellowLed();
-        vertYellow = 1;
+        verticalYellowChanged = 1;
       }
-      if(!vertGreen){
+      if(!verticalGreenChanged){
         verticalGreenLed();
-        vertGreen = 1;
+        verticalGreenChanged = 1;
       }
-      if(vertYellow && vertGreen){
-        vertLightCha = 1;
+      if(verticalYellowChanged && verticalGreenChanged){
+        verticalLightCompleteChanged = 1;
       }
+
+      //no cars on one road so car will be prioritized
+      if(driveRequestHorizontal && !driveRequestVertical){
+        if(verticalYellowChanged){
+          verticalGreenLed();
+          i = 0;
+          driveDirection0v1h = 0;
+        }
+        if(!verticalYellowChanged){
+          verticalYellowLed();
+          verticalYellowChanged;
+        }
+      }
+
+      // inverted from above
+      // if(!driveRequestHorizontal && driveRequestVertical){
+        
+      // }
     }
     else{
       continue;
@@ -193,53 +211,53 @@ void loop(){
 }
 
 void memReset(){
-  direction = !direction;
+  driveDirection0v1h = !driveDirection0v1h;
 
-  walkRequestNorthAck = 0; walkRequestSouthAck = 0; 
-   walkRequestEastAck = 0;  walkRequestWestAck = 0;
+  walkRequestNorthGo = 0; walkRequestSouthGo = 0; 
+   walkRequestEastGo = 0;  walkRequestWestGo = 0;
             northTick = 0;           southTick = 0;           
              eastTick = 0;            westTick = 0;
 
-  vertGreen = 0; vertYellow = 0; vertRed = 0;
-  horiGreen = 0; horiYellow = 0; vertRed = 0;
+  verticalGreenChanged = 0; verticalYellowChanged = 0; verticalRedChanged = 0;
+  horizontalGreenChanged = 0; horizontalYellowChanged = 0; verticalRedChanged = 0;
 
-  if(direction){
-    vertLightCha = 0;
+  if(driveDirection0v1h){
+    verticalLightCompleteChanged = 0;
   }
-  if(!direction){
-    horiLightCha = 0;
+  if(!driveDirection0v1h){
+    horizontalLightCompleteChanged = 0;
   } //hellooo
 }
 
 void functions(){
-  northFunction = !direction && walkRequestNorth && !walkRequestNorthAck && i <= 10;
+  northFunction = !driveDirection0v1h && walkRequestNorth && !walkRequestNorthGo && i <= 10;
 
-  // southFunction = !direction && walkRequestSouth && !walkRequestSouthAck && i <= 10;
-  // eastFunction = direction && walkRequestEast && !walkRequestEastAck && i <= 10;
-  // westFunction = direction && walkRequestWest && !walkRequestWestAck && i <= 10;
+  // southFunction = !driveDirection0v1h && walkRequestSouth && !walkRequestSouthGo && i <= 10;
+  // eastFunction = driveDirection0v1h && walkRequestEast && !walkRequestEastGo && i <= 10;
+  // westFunction = driveDirection0v1h && walkRequestWest && !walkRequestWestGo && i <= 10;
 }
 
 void northCrosswalk(){
   if(northFunction){
-        walkNorthGreen();
-        walkRequestNorthAck = 1;
-        northTick = i;
-      }
-      if(i == northTick + 10){ // waits for 10 ticks / 10 sec
-        walkNorthRed();
-      }
-      if(direction && walkRequestNorth && !walkRequestNorthAck){ // puts in memory a request for walking 
-        walkRequestOnRedNorth = 1;
-      }
-      if(walkRequestOnRedNorth && !direction){
-        walkNorthGreen();
-        walkRequestOnRedNorth = 0;
-      }
+    walkNorthGreen();
+    walkRequestNorthGo = 1;
+    northTick = i;
+  }
+  if(i == northTick + 10){ // waits for 10 ticks / 10 sec
+    walkNorthRed();
+  }
+  if(driveDirection0v1h && walkRequestNorth && !walkRequestNorthGo){ // puts in memory a request for walking 
+    walkRequestOnRedNorth = 1;
+  }
+  if(walkRequestOnRedNorth && !driveDirection0v1h){
+    walkNorthGreen();
+    walkRequestOnRedNorth = 0;
+  }
 }
 void southCrosswalk(){
-  // if(walkRequestSouth && !walkRequestSouthAck && i <= 10){
+  // if(walkRequestSouth && !walkRequestSouthGo && i <= 10){
       //   walkSouthGreen();
-      //   walkRequestEastAck = 1; 
+      //   walkRequestEastGo = 1; 
       //   southTick = i;
       // }
       // if(i == southTick + 10){
@@ -247,9 +265,9 @@ void southCrosswalk(){
       // }
 }
 void eastCrosswalk(){
-  // if(walkRequestEast && !walkRequestEastAck && i <= 10){
+  // if(walkRequestEast && !walkRequestEastGo && i <= 10){
       //   walkEastGreen();
-      //   walkRequestEastAck = 1; 
+      //   walkRequestEastGo = 1; 
       //   eastTick = i;
       // }
       // if(i == eastTick + 10){
@@ -257,9 +275,9 @@ void eastCrosswalk(){
       // }
 }
 void westCrosswalk(){
-  // if(walkRequestWest && !walkRequestWestAck && i <= 10){
+  // if(walkRequestWest && !walkRequestWestGo && i <= 10){
       //   walkWestGreen();
-      //   walkRequestWestAck = 1; 
+      //   walkRequestWestGo = 1; 
       //   westTick = i;
       // }
       // if(i == westTick + 10){
@@ -267,15 +285,14 @@ void westCrosswalk(){
       // }
 }
 
-void sensorRead()
-{
+void sensorRead(){
   driveRequestVertical =   digitalRead(roadVerticalSense);
   driveRequestHorizontal = digitalRead(roadHorizontalSense);
 
-  walkRequestNorth = digitalRead(northCrosswalkSwitch);
-  walkRequestSouth = digitalRead(southCrosswalkSwitch);
-  walkRequestEast =  digitalRead(eastCrosswalkSwitch);
-  walkRequestWest =  digitalRead(westCrosswalkSwitch);
+  walkRequestNorth = digitalRead(northCrosswalkButton);
+  walkRequestSouth = digitalRead(southCrosswalkButton);
+  walkRequestEast =  digitalRead(eastCrosswalkButton);
+  walkRequestWest =  digitalRead(westCrosswalkButton);
 }
 
 void verticalGreenLed(){
@@ -371,9 +388,25 @@ void serialPlotter(){
   Serial.println(i);
 }
 
+void crosswalkButton(){
+  if(walkRequestNorth){
+    digitalWrite(northButtonWaitLed, HIGH);
+  }
+  if(walkRequestSouth){
+    digitalWrite(southButtonWaitLed, HIGH);
+  }
+  if(walkRequestEast){
+    digitalWrite(eastButtonWaitLed, HIGH);
+  }
+  if(walkRequestWest){
+    digitalWrite(westButtonWaitLed, HIGH);
+  }
+}
+
 void delayPut(){
-  for(i = 0; i < delayTickAmount; i++)
+  for(j = 0; j < delayTickAmount; j++)
   sensorRead();
+  crosswalkButton();
   serialPlotter();
   delay(forDelay);
 }
