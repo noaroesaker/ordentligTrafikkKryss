@@ -69,10 +69,11 @@ bool verticalLightCompleteChanged = 0;
 bool horizontalLightCompleteChanged = 0;
 
 // button was pressed and request fulfilled now is green light
-bool walkRequestNorthGo = 0;
-bool walkRequestSouthGo = 0;
-bool walkRequestEastGo = 0;
-bool walkRequestWestGo = 0;
+// test #volitale bool
+volatile bool walkRequestNorthGo = 0;
+volatile bool walkRequestSouthGo = 0;
+volatile bool walkRequestEastGo = 0;
+volatile bool walkRequestWestGo = 0;
 
 // walk request when red light so it remembers that you want to go over at green light
 bool walkRequestOnRedNorth = 0;
